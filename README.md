@@ -16,3 +16,7 @@ Prerequisites
 >
 > - Install [uv](https://docs.astral.sh/uv), a **Python** package manager
 >   written in **Rust**.
+>
+> - Run `uv sync` inside this directory to start developing or
+>   testing. You can also install it as a system tool with
+>   `uv tool install .`.
