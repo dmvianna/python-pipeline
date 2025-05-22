@@ -1,7 +1,7 @@
 [project]
 name = "python-pipeline"
 version = "0.1.0"
-description = "Add your description here"
+description = "Australian Superannuation compliance tool"
 readme = "README.md"
 authors = [
     { name = "Daniel Vianna", email = "1708810+dmvianna@users.noreply.github.com" }
@@ -15,3 +15,21 @@ python-pipeline = "python_pipeline:main"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests"
+]
+
+[tool.uv]
+dev-dependencies = [
+    "ruff",
+    "pyright",
+    "pytest"
+]
+
+[tool.pyright]
+venv = ".venv"
+venvPath = "."
