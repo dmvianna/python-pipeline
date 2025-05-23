@@ -102,7 +102,7 @@ def find_variance(frames: Frames) -> pd.DataFrame:
     # Not sure whether we should use the payment_made or
     # pay_period_to here.
     actual = calculate_disbursement(frames.disbursements, "pay_period_to")
-    actual = disbursements_due(actual, "pay_period_to")
+    actual = disbursements_due(actual, "sgc_amount")
 
     expected = payable_super(frames.payslips)
     expected = calculate_disbursement(expected, "end")
