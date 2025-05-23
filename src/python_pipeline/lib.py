@@ -92,7 +92,7 @@ def disbursements_due(super: pd.DataFrame, sum_col: str) -> pd.Series:
     Sum `sum_col` by `disbursement_due` and `employee_code`.
     """
     groupby = ["employee_code", "disbursement_due"]
-    return super.groupby(groupby).loc[:, sum_col].sum()
+    return super.groupby(groupby)[sum_col].sum()  # pyright: ignore[reportReturnType]
 
 
 def find_variance(frames: Frames, due: pd.Series) -> pd.Series:
