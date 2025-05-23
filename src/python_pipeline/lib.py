@@ -69,7 +69,15 @@ def payable_super(frames: Frames, perc: float = 9.5) -> pd.DataFrame:
     payslips["super"] = payslips["amount"] / perc
     groupby = ["payslip_id", "end", "employee_code"]
     payable = payslips.groupby(groupby).sum().super.reset_index()
-    payable["disbursement_due"] = payable["end"].apply(
-        lambda x: pd.Period(x, "M").end_time + timedelta(days=28)  # pyright: ignore[reportAttributeAccessIssue]
-    )
     return payable
+
+
+def disbursement_deadline(frames: Frames) -> pd.DataFrame:
+    """
+    Calculate limit date for disbursement.
+    """
+    super = payable_super(frames)
+    super["disbursement_due"] = super["end"].dt.to_period("Q").dt.end_time + timedelta(
+        days=28
+    )
+    return super
