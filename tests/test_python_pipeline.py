@@ -2,7 +2,7 @@ from dataclasses import asdict
 
 import pandas as pd
 import pytest
-from python_pipeline.lib import SheetNameError, read_xlsx
+from python_pipeline.lib import SheetNameError, read_xlsx, select_ordinary
 
 
 class TestRead:
@@ -21,3 +21,13 @@ class TestRead:
         with pytest.raises(SheetNameError):
             frames = read_xlsx(empty)
             print(frames)
+
+
+class TestTransform:
+    def test_select_ordinary(self, frames):
+        """
+        Select only ordinary payments.
+        """
+        ordinary = select_ordinary(frames)
+        print(ordinary)
+        assert ordinary.payslips.shape[0] == 1

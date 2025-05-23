@@ -40,3 +40,20 @@ def read_xlsx(path: Path) -> Frames:
         frames[label.lower()] = file.parse(label)
 
     return Frames(**frames)
+
+
+def select_ordinary(frames: Frames) -> Frames:
+    """
+    Keep ordinary time earnings, discard others.
+    """
+    payslips = pd.merge(
+        frames.payslips,
+        frames.paycodes,
+        how="inner",
+        left_on="code",
+        right_on="pay_code",
+    )
+    frames.payslips = payslips.loc[payslips.ote_treatment == "OTE"].drop(
+        labels=frames.paycodes.columns, axis=1
+    )
+    return frames
