@@ -81,3 +81,11 @@ def disbursement_deadline(frames: Frames) -> pd.DataFrame:
         days=28
     )
     return super
+
+
+def disbursements_due(super: pd.DataFrame) -> pd.Series:
+    """
+    Sum disbursements due by quarter, by employee.
+    """
+    groupby = ["employee_code", "disbursement_due"]
+    return super.groupby(groupby).super.sum()
