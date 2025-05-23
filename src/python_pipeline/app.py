@@ -23,15 +23,16 @@ class App:
         self.logger.addHandler(handler)
         self.logger.info("App initialised.")
 
-    def run(self, path: Path) -> None:
+    def run(self, raw_path: str) -> None:
         """
         Process one file.
         """
+        path = Path(raw_path)
         self.logger.info(f"Reading {path}")
         frames = read_xlsx(path)
         self.logger.info(f"Calculating variance")
         result = find_variance(frames)
         out_path = f"{path.stem}.variance.xlsx"
-        self.logger.info(f"Writing {path}")
+        self.logger.info(f"Writing {out_path}")
         result.to_excel(out_path, "variance")
         self.logger.info("Finished.")
