@@ -26,7 +26,6 @@ def read_xlsx(path: Path) -> Frames:
     Read XLSX file into a convenient format.
     """
     file = pd.ExcelFile(path)
-    sheets = [label.lower() for label in file.sheet_names]
     frames = {}
 
     # The XSLX must have a single one of these sheets, else bail
