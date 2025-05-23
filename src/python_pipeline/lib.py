@@ -1,8 +1,43 @@
+from dataclasses import dataclass
 from pathlib import Path
 
+import pandas as pd
+from pandas.core import frame
+from pandas.io.common import BaseBufferT
 
-def read_xlsx(self, path: Path) -> None:
+
+class SheetNameError(Exception):
+    pass
+
+
+@dataclass
+class Frames:
+    """
+    The payroll data, in convenient format.
+    """
+
+    disbursements: pd.DataFrame
+    payslips: pd.DataFrame
+    paycodes: pd.DataFrame
+
+
+def read_xlsx(path: Path) -> Frames:
     """
     Read XLSX file into a convenient format.
     """
-    pass
+    file = pd.ExcelFile(path)
+    sheets = [label.lower() for label in file.sheet_names]
+    frames = {}
+
+    # The XSLX must have a single one of these sheets, else bail
+    labels = ["Disbursements", "Payslips", "PayCodes"]
+    for label in labels:
+        matching = [sheet for sheet in file.sheet_names if sheet == label]
+        if len(matching) == 1:
+            pass
+        else:
+            raise SheetNameError(f"{label} sheet missing or duplicate.")
+
+        frames[label.lower()] = file.parse(label)
+
+    return Frames(**frames)
