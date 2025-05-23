@@ -1,7 +1,8 @@
 from dataclasses import asdict
 
 import pandas as pd
-from python_pipeline.lib import read_xlsx
+import pytest
+from python_pipeline.lib import SheetNameError, read_xlsx
 
 
 class TestRead:
@@ -12,3 +13,11 @@ class TestRead:
         frames = read_xlsx(example)
         for value in asdict(frames).values():
             assert isinstance(value, pd.DataFrame)
+
+    def test_read_empty_xlsx(self, empty):
+        """
+        Fail a file with missing sheets.
+        """
+        with pytest.raises(SheetNameError):
+            frames = read_xlsx(empty)
+            print(frames)

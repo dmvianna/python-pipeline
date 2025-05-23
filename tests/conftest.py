@@ -17,3 +17,11 @@ def example() -> Path:
     Example file.
     """
     return Path("tests/fixtures/Sample Super Data.xlsx")
+
+
+@pytest.fixture
+def empty() -> Path:
+    """
+    Empty file.
+    """
+    return Path("tests/fixtures/empty.xlsx")
