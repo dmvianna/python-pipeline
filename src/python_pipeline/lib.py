@@ -36,7 +36,11 @@ def read_xlsx(path: Path) -> Frames:
         else:
             raise SheetNameError(f"{label} sheet missing or duplicate.")
 
-        dataframe: pd.DataFrame = file.parse(label)  # pyright: ignore [reportAssignmentType]
+        if label == "Disbursements":
+            parse_dates = ["pay_period_to"]
+        else:
+            parse_dates = []
+        dataframe: pd.DataFrame = file.parse(label, parse_dates=parse_dates)  # pyright: ignore [reportAssignmentType]
         dataframe.columns = dataframe.columns.str.strip()
         frames[label.lower()] = dataframe
 
@@ -89,3 +93,16 @@ def disbursements_due(super: pd.DataFrame, sum_col: str) -> pd.Series:
     """
     groupby = ["employee_code", "disbursement_due"]
     return super.groupby(groupby).loc[:, sum_col].sum()
+
+
+def find_variance(frames: Frames, due: pd.Series) -> pd.Series:
+    """
+    Compare actual with due disbursements.
+    """
+    # Not sure whether we should use the payment_made or
+    # pay_period_to here.
+    actual = calculate_disbursement(frames.disbursements, "pay_period_to")
+    actual = disbursements_due(actual, "pay_period_to")
+
+    expected = payable_super(frames.payslips)
+    expected = disbursements_due(expected, "end")
