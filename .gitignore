@@ -12,3 +12,7 @@ wheels/
 # Jupyter
 *.ipynb
 .ipynb_checkpoints
+
+# Excel droppings except in fixtures directory
+*.xlsx*
+!tests/fixtures/*.xlsx
