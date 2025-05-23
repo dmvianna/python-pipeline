@@ -2,8 +2,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import pandas as pd
-from pandas.core import frame
-from pandas.io.common import BaseBufferT
+from pandas.core.window.rolling import timedelta
 
 
 class SheetNameError(Exception):
@@ -60,3 +59,17 @@ def select_ordinary(frames: Frames) -> Frames:
         labels=frames.paycodes.columns, axis=1
     )
     return frames
+
+
+def payable_super(frames: Frames, perc: float = 9.5) -> pd.DataFrame:
+    """
+    Add a column to payslips with payable super.
+    """
+    payslips = frames.payslips
+    payslips["super"] = payslips["amount"] / perc
+    groupby = ["payslip_id", "end", "employee_code"]
+    payable = payslips.groupby(groupby).sum().super.reset_index()
+    payable["disbursement_due"] = payable["end"].apply(
+        lambda x: pd.Period(x, "M").end_time + timedelta(days=28)  # pyright: ignore[reportAttributeAccessIssue]
+    )
+    return payable
