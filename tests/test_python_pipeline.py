@@ -2,10 +2,10 @@ from dataclasses import asdict
 
 import pandas as pd
 import pytest
-from pandas.core.ops.array_ops import Timestamp
 from python_pipeline.lib import (
     SheetNameError,
-    disbursement_deadline,
+    calculate_disbursement,
+    payable_super,
     read_xlsx,
     select_ordinary,
 )
@@ -42,7 +42,7 @@ class TestTransform:
         """
         Create column with last date of quarter + 28 days.
         """
-        frames.payslips = pd.DataFrame.from_dict(
+        payslips = pd.DataFrame.from_dict(
             {
                 "payslip_id": [0],
                 "employee_code": [0],
@@ -51,7 +51,9 @@ class TestTransform:
             }
         )
 
-        deadlines = disbursement_deadline(frames)
+        super = payable_super(payslips)
+        deadlines = calculate_disbursement(super, "end")
+
         assert deadlines.loc[0, "disbursement_due"] == pd.Timestamp(
             "2018-04-28 23:59:59.999999999"
         )

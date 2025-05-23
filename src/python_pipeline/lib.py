@@ -61,31 +61,31 @@ def select_ordinary(frames: Frames) -> Frames:
     return frames
 
 
-def payable_super(frames: Frames, perc: float = 9.5) -> pd.DataFrame:
+def payable_super(payslips: pd.DataFrame, perc: float = 9.5) -> pd.DataFrame:
     """
     Add a column to payslips with payable super.
     """
-    payslips = frames.payslips
     payslips["super"] = payslips["amount"] / perc
     groupby = ["payslip_id", "end", "employee_code"]
     payable = payslips.groupby(groupby).sum().super.reset_index()
     return payable
 
 
-def disbursement_deadline(frames: Frames) -> pd.DataFrame:
+def calculate_disbursement(
+    frame: pd.DataFrame, datecol: str, plus_days: int = 28
+) -> pd.DataFrame:
     """
-    Calculate limit date for disbursement.
+    Having a date, find its quarter date, then add more days to it.
     """
-    super = payable_super(frames)
-    super["disbursement_due"] = super["end"].dt.to_period("Q").dt.end_time + timedelta(
-        days=28
-    )
-    return super
+    frame["disbursement_due"] = frame[datecol].dt.to_period(
+        "Q"
+    ).dt.end_time + timedelta(days=plus_days)
+    return frame
 
 
-def disbursements_due(super: pd.DataFrame) -> pd.Series:
+def disbursements_due(super: pd.DataFrame, sum_col: str) -> pd.Series:
     """
-    Sum disbursements due by quarter, by employee.
+    Sum `sum_col` by `disbursement_due` and `employee_code`.
     """
     groupby = ["employee_code", "disbursement_due"]
-    return super.groupby(groupby).super.sum()
+    return super.groupby(groupby).loc[:, sum_col].sum()
