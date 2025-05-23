@@ -37,7 +37,9 @@ def read_xlsx(path: Path) -> Frames:
         else:
             raise SheetNameError(f"{label} sheet missing or duplicate.")
 
-        frames[label.lower()] = file.parse(label)
+        dataframe: pd.DataFrame = file.parse(label)  # pyright: ignore [reportAssignmentType]
+        dataframe.columns = dataframe.columns.str.strip()
+        frames[label.lower()] = dataframe
 
     return Frames(**frames)
 
@@ -53,6 +55,7 @@ def select_ordinary(frames: Frames) -> Frames:
         left_on="code",
         right_on="pay_code",
     )
+
     frames.payslips = payslips.loc[payslips.ote_treatment == "OTE"].drop(
         labels=frames.paycodes.columns, axis=1
     )
