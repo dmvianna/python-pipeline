@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [project.scripts]
-python-pipeline = "python_pipeline:main"
+python-pipeline = "python_pipeline.__main__:main"
 
 [build-system]
 requires = ["hatchling"]

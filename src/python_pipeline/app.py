@@ -2,6 +2,8 @@ import logging
 from pathlib import Path
 from time import gmtime
 
+from python_pipeline.lib import find_variance, read_xlsx
+
 
 class App:
     """
@@ -25,7 +27,11 @@ class App:
         """
         Process one file.
         """
-        self.logger.info(f"Processing {path}")
-        # do stuff
-        # finished doing stuff
+        self.logger.info(f"Reading {path}")
+        frames = read_xlsx(path)
+        self.logger.info(f"Calculating variance")
+        result = find_variance(frames)
+        out_path = f"{path.stem}.variance.xlsx"
+        self.logger.info(f"Writing {path}")
+        result.to_excel(out_path, "variance")
         self.logger.info("Finished.")
