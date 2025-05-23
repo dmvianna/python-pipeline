@@ -95,7 +95,7 @@ def disbursements_due(super: pd.DataFrame, sum_col: str) -> pd.Series:
     return super.groupby(groupby)[sum_col].sum()  # pyright: ignore[reportReturnType]
 
 
-def find_variance(frames: Frames, due: pd.Series) -> pd.Series:
+def find_variance(frames: Frames) -> pd.DataFrame:
     """
     Compare actual with due disbursements.
     """
@@ -107,3 +107,8 @@ def find_variance(frames: Frames, due: pd.Series) -> pd.Series:
     expected = payable_super(frames.payslips)
     expected = calculate_disbursement(expected, "end")
     expected = disbursements_due(expected, "super")
+
+    compare = actual.to_frame("actual").join(expected.to_frame("expected"))
+
+    compare["variance"] = compare["expected"] - compare["actual"]
+    return compare
