@@ -105,4 +105,5 @@ def find_variance(frames: Frames, due: pd.Series) -> pd.Series:
     actual = disbursements_due(actual, "pay_period_to")
 
     expected = payable_super(frames.payslips)
-    expected = disbursements_due(expected, "end")
+    expected = calculate_disbursement(expected, "end")
+    expected = disbursements_due(expected, "super")
