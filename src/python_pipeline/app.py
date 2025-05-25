@@ -34,5 +34,5 @@ class App:
         result = find_variance(frames)
         out_path = f"{path.stem}.variance.xlsx"
         self.logger.info(f"Writing {out_path}")
-        result.to_excel(out_path, sheet_name="variance")
+        result.to_excel(out_path, sheet_name="variance", float_format="%.2f")
         self.logger.info("Finished.")
