@@ -69,7 +69,7 @@ def payable_super(payslips: pd.DataFrame, perc: float = 9.5) -> pd.DataFrame:
     """
     Add a column to payslips with payable super.
     """
-    payslips["super"] = payslips["amount"] / perc
+    payslips["super"] = payslips["amount"] * perc / 100
     groupby = ["payslip_id", "end", "employee_code"]
     payable = payslips.groupby(groupby).sum().super.reset_index()
     return payable
