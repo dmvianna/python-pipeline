@@ -99,10 +99,9 @@ def find_variance(frames: Frames) -> pd.DataFrame:
     """
     Compare actual with due disbursements.
     """
-    #
+
     frames = select_ordinary(frames)
-    # Not sure whether we should use the payment_made or
-    # pay_period_to here.
+
     actual = calculate_disbursement_due_date(frames.disbursements, "payment_made")
     actual = disbursements_due(actual, "sgc_amount")
 
