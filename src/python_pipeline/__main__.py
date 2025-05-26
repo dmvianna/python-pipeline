@@ -19,7 +19,6 @@ from python_pipeline.app import App
 def main() -> None:
     args = docopt(__doc__, version="python-pipeline 1.0")
 
-    print(args)
     a = App()
 
     try:
