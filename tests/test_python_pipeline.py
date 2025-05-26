@@ -1,10 +1,12 @@
 from dataclasses import asdict
 
 import pandas as pd
+import pandas.testing as pt
 import pytest
 from python_pipeline.lib import (
     SheetNameError,
     calculate_disbursement,
+    find_variance,
     payable_super,
     read_xlsx,
     select_ordinary,
@@ -57,3 +59,13 @@ class TestTransform:
         assert deadlines.loc[0, "disbursement_due"] == pd.Timestamp(
             "2018-04-28 23:59:59.999999999"
         )
+
+    def test_logic_end_to_end(self, example_frames):
+        """
+        Validate logic using case where the correct result is known.
+        """
+        result = find_variance(example_frames)
+        print(result.sum())
+
+        expected = {"actual": 1500.0, "expected": 1425.0, "variance": 425.0}
+        pt.assert_series_equal(result.sum(), pd.Series(data=expected))
