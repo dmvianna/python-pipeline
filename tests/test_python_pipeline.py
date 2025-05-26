@@ -5,7 +5,7 @@ import pandas.testing as pt
 import pytest
 from python_pipeline.lib import (
     SheetNameError,
-    calculate_disbursement,
+    calculate_disbursement_due_date,
     find_variance,
     payable_super,
     read_xlsx,
@@ -54,7 +54,7 @@ class TestTransform:
         )
 
         super = payable_super(payslips)
-        deadlines = calculate_disbursement(super, "end")
+        deadlines = calculate_disbursement_due_date(super, "end")
 
         assert deadlines.loc[0, "disbursement_due"] == pd.Timestamp(
             "2018-04-28 23:59:59.999999999"
