@@ -7,6 +7,11 @@ Quickstart
 ```shell
 uv run python-pipeline
 ```
+Or if you want to process a sample file from our test suite:
+
+```shell
+uv run python-pipeline ./tests/fixtures/Sample\ Super\ Data.xlsx
+```
 
 Prerequisites
 -------------
