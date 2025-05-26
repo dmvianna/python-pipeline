@@ -37,7 +37,7 @@ def read_xlsx(path: Path) -> Frames:
             raise SheetNameError(f"{label} sheet missing or duplicate.")
 
         if label == "Disbursements":
-            parse_dates = ["pay_period_to"]
+            parse_dates = ["pay_period_to", "pay_period_from", "payment_made"]
         else:
             parse_dates = []
         dataframe: pd.DataFrame = file.parse(label, parse_dates=parse_dates)  # pyright: ignore [reportAssignmentType]
