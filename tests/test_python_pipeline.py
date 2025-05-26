@@ -38,7 +38,7 @@ class TestTransform:
         print(ordinary)
         assert ordinary.payslips.shape[0] == 1
 
-    def test_disbursement_deadline(self, frames):
+    def test_disbursement_deadline(self):
         """
         Create column with last date of quarter + 28 days.
         """
